@@ -33,6 +33,8 @@
             <a href="https://github.com/jamiller619/jquery.dialog">GitHub Project</a>
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <a href="http://jamiller.me">Created by Jeff Miller</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="http://jamiller.me/2012/10/04/jquery-dialog-a-simple-no-frills-dialog-plugin/">Comments / Suggestions</a>
         </div>
     </div>
 	

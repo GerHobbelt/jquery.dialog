@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>jQuery Dialog</title>
+    <title>jQuery Dialog : This is a test</title>
 
     <link rel="stylesheet" type="text/css" href="bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -13,7 +13,6 @@
     <script type="text/javascript" src="spin.min.js"></script>
     <script type="text/javascript" src="jquery.dialog.js"></script>
 	<script type="text/javascript">
-
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-19183133-1']);
 	  _gaq.push(['_setDomainName', 'jamiller.me']);
@@ -24,7 +23,6 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
-
 	</script>
 </head>
 <body>

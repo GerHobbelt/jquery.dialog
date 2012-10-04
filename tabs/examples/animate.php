@@ -1,7 +1,7 @@
 <h2>animate with css</h2>
 
 <div class="well">
-	<button class="btn btn-primary" id="open-dialog">Open the Dialog</button>
+    <button class="btn btn-primary" id="open-dialog">Open the Dialog</button>
 </div>
 
 <h5>css</h5>
@@ -16,16 +16,16 @@
 <pre class="prettyprint language-javascript">
 $(function() {
 	
-	dialog.defaults.backgroundClass = 'modal-backdrop';
+    Dialog.defaults.backgroundClass = 'modal-backdrop';
 	
-	$('#open-dialog').click(function () {
-		
-		var dialogOptions = {
-			url: 'ajax.html',
-			closeButtonClass: 'close'
-		};
-		
-		var defaultDialog = new dialog(dialogOptions);
-		
-	});	
+    $('#open-dialog').click(function () {
+
+        var dialogOptions = {
+            url: 'ajax.html',
+            closeButtonClass: 'close'
+        };
+
+        var defaultDialog = new Dialog(dialogOptions);
+
+    });	
 }</pre>

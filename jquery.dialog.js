@@ -16,228 +16,251 @@
  * limitations under the License.
  * ========================================================= */
 
-var dialog = function (options)
+var Dialog = Dialog || {};
+
+Dialog = function (options)
 {	
-	var obj = this,
-		dWindow,
-		loader,
-		defaults = $.extend({}, dialog.defaults, options),
-		background = $('<div />').addClass(defaults.backgroundClass),
-		siteContainer = $('body');
+    var obj = this,
+        dialog,
+        loader,
+        spinner,
+        dialogPosition,
+        defaults = $.extend({}, Dialog.defaults, options),
+        background = $('<div />').addClass(defaults.backgroundClass),
+        siteContainer = $('body');
 	
-	this.addScroll = function ()
-	{
-		var h = dWindow.height(),
-			wh = $(window).height() - 40;
-			
-		if (h > wh)
-		{
-			$(defaults.scrollContainer, dWindow).addClass('dialog-scroll').height(wh - 40);
-			dWindow.height(wh - 20);
-		}
-	};
+    this.addScroll = function ()
+    {
+        var h = dialog.height(),
+            wh = $(window).height();
 
-	this.close = function ()
-	{	
-		if (!dWindow)
-		{
-			return;
-		}
+        if (h > wh)
+        {
+            $(defaults.scrollContainer, dialog).addClass('dialog-scroll').height(wh - 200);
+        }
+        
+        positionDialog();
+    };
 
-		$(window).unbind('click.dialog');  
-		dWindow.remove();        
-		background.remove();
-	};
+    this.close = function ()
+    {	
+        if (!dialog) return;
+        
+        if(defaults.onclose && typeof(defaults.onclose) === 'function')
+        {
+            var response = defaults.onclose(dialog);
+            
+            if(response === false) return;
+        }
+        
+        $(window).trigger('dialog.close');
 
-	this.showSpinner = function ()
-	{
-		loader = $('<div id="dialog-loader">Loading</div>');
-		siteContainer.append(loader);
+        dialog.unbind().remove();
+        background.remove();
+    };
+    
+    // Position
+    if (typeof (defaults.position) === 'object')
+    {
+        // If defaults.position is an event i.e. mouse
+        if (defaults.position.which !== undefined)
+        {
+            dialogPosition = {
+                my: 'left top',
+                at: 'center',
+                of: defaults.position,
+                offset: '10' 
+            };
+        }
+        else
+        {
+            dialogPosition = defaults.position;
+        }
 
-		loader.position(
-		{
-			my: 'center bottom',
-			at: 'center',
-			of: window
-		});
-	};
+    }
+    else if (defaults.position === 'center')
+    {
+        dialogPosition = {
+            my: 'center',
+            at: 'center',
+            of: window
+        }
+    }
 
-	if (defaults.showLoader)
-	{
-		this.showSpinner();
-	}
+    this.showSpinner = function ()
+    {
+        loader = $('<div />').addClass(defaults.spinnerClass);
+        
+        siteContainer.append(loader);
+
+        loader.position(dialogPosition).css('z-index', 10000);
+        
+        spinner = new Spinner().spin(loader[0]);
+    };
+    
+    if(defaults.showSpinner)
+    {
+        this.showSpinner();
+    }
+    
+    if (defaults.modal)
+    {
+        siteContainer.append(background);
+    }
+
+    function centerDialog()
+    {	
+        dialogPosition = {
+            my: 'center',
+            at: 'center',
+            of: window
+        };
+        
+        dialog.position(dialogPosition);
+    }
 	
-	if (defaults.showBackground)
-	{
-		siteContainer.append(background);		
-	}
-	else if (defaults.modal && !defaults.showBackground)
-	{
-		background.css('background-color', 'transparent');
-		siteContainer.append(background);
-	}
-	
-	function centerDialog()
-	{	
-		dWindow.position(
-		{
-			my: 'center',
-			at: 'center',
-			of: window,
-			using: function (pos)
-			{
-				$(this).css(
-				{
-					top: ($(window).height() / 2) - (dWindow.outerHeight() / 2),
-					left: pos.left
-				});
-			}
-		});
+    function positionDialog()
+    {	
+        // I can't position something that isn't shown
+        dialog.show();
 
-		obj.addScroll();
-	}
-	
-	function positionDialog()
-	{	
-		// I can't position something that isn't shown
-		dWindow.show();
-		
-		if (defaults.width != null) dWindow.width(defaults.width);
-		if (defaults.height != null) dWindow.height(defaults.height);
+        if (defaults.width != null) dialog.width(defaults.width);
+        if (defaults.height != null) dialog.height(defaults.height);
 
-		// Position
-		if (typeof (defaults.position) === 'object')
-		{
-			// If defaults.position is an event i.e. mouse
-			if (defaults.position.which !== undefined)
-			{
-				dWindow.position(
-				{
-					my: 'left top',
-					at: 'center',
-					of: defaults.position,
-					offset: '10'
-				});
-			}
-			else
-			{
-				dWindow.position(defaults.position);
-			}
+        // Position
+        dialog.position(dialogPosition);
+    }
 
-			obj.addScroll();
-			
-		}
-		else if (defaults.position === 'center')
-		{
-			centerDialog();
+    function init(data, isLocal)
+    {
+        dialog = $(data);
 
-			// Reposition on window resize or dialog resize
-			$(window).resize(function ()
-			{
-				centerDialog();
-			});
+        // Remove loader
+        if (loader)
+        {
+            spinner.stop();
+            loader.remove();
+        }
 
-			// This relies on Ben Alman's jQuery resize plugin
-			dWindow.resize(function ()
-			{
-				centerDialog();
-			});
-		}
-	}
-	
-	function init(data, isLocal)
-	{
-		dWindow = $(data);
+        // Attach
+        $('body').append(dialog.addClass('dialog'));
+        
+        if(defaults.onbeforeload && typeof(defaults.onbeforeload) === 'function')
+        {
+            defaults.onbeforeload(dialog);
+            $(window).trigger('dialog.beforeload');
+        }
 
-		// Remove loader
-		if (loader) loader.remove();
+        positionDialog();
+        obj.addScroll();
+        
+        if (defaults.position === 'center')
+        {
+            // Reposition on window resize or dialog resize
+            $(window).resize(function ()
+            {
+                centerDialog();
+            });
 
-		// Attach
-		$('body').append(dWindow.addClass('dialog'));
-		
-		positionDialog();
-		
-		// Tie handlers to close buttons
-		dWindow.on('click', '.' + defaults.closeButtonClass, function()
-		{
-			if(defaults.onclose && typeof(defaults.onclose) === 'function')
-			{
-				defaults.onclose();
-			}
-			
-			obj.close();
-		});
+            // This relies on Ben Alman's jQuery resize plugin
+            dialog.resize(function ()
+            {
+                centerDialog();
+            });
+        }
 
-		if (dWindow.draggable && defaults.drag.enabled === true)
-		{
-			dWindow.draggable(
-			{
-				handle: defaults.drag.handle
-			});
-		}
-		
-		if(isLocal) dWindow.addClass('dialog-local');
+        // Tie handlers to close buttons
+        dialog.on('click.dialog', '.' + defaults.closeButtonClass, function()
+        {
+            obj.close();
+        });
 
-		if(defaults.onload && typeof(defaults.onload) === 'function')
-		{
-			defaults.onload(dWindow);
-		}
-	}
-	
-	// Let's go!
-	if(!defaults.url || defaults.url.length === 0)
-	{
-		alert('DIALOG ERROR: A dialog must have a url defined!');
-		return;
-	}
+        if (dialog.draggable && defaults.drag.enabled === true)
+        {
+            dialog.draggable(
+            {
+                handle: defaults.drag.handle
+            });
+        }
 
-	// Is local
-	var firstChar = defaults.url.substr(0,1);
-	if (firstChar === '#' || firstChar === '.')
-	{
-		init($(defaults.url), true);
-	}
-	// else is remote
-	else
-	{
-		this.request = $.ajax(
-		{
-			url: defaults.url,
-			data: defaults.params,
-			type: defaults.method,
-			success: function (data) {
-				init(data, false);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				defaults.onerror(jqXHR, textStatus, errorThrown);
-			}
-		});
-	}
+        if(isLocal) dialog.addClass('dialog-local');
 
-	return this;
+        if(defaults.onload && typeof(defaults.onload) === 'function')
+        {
+            defaults.onload(dialog);
+            $(window).trigger('dialog.load');
+        }
+    }
+
+    // Let's go!
+    if(!defaults.url || defaults.url.length === 0)
+    {
+        alert('DIALOG ERROR: A dialog must have a url defined!');
+        return;
+    }
+
+    // Is local
+    var firstChar = defaults.url.substr(0,1);
+    if (firstChar === '#' || firstChar === '.')
+    {
+        init($(defaults.url), true);
+    }
+    // else is remote
+    else
+    {
+        this.request = $.ajax(
+        {
+            url: defaults.url,
+            data: defaults.params,
+            type: defaults.method,
+            success: function (data)
+            {
+                init(data, false);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                defaults.onerror(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    return this;
 };
 
-dialog.defaults = {
-	url: null,
-	width: null,
-	height: null,
-	method: 'GET',
-	params: {},
-	showLoader: false,
-	showBackground: true,
-	backgroundClass: 'dialog-background',
-	modal: true,
-	closeButtonClass: 'dialog-close',
-	drag: {
-		enabled: false,
-		handle: ''
-	},
-	// This should be the body class of your dialog window content
-	// and will have a class applied that adds a scrollbar if needed
-	scrollContainer: '',
-	position: 'center',
-	autoResize: true,
-	onload: function (dWindow) { },
-	onerror: function (jqXHR, textStatus, errorThrown) { },
-	onclose: function (dWindow) { }
+Dialog.defaults = {
+    // This can either be the url of the ajax content
+    // or, in the case of local content, the id of the element
+    url: null,
+    // The dialog will size itself according to the contents
+    // but can be overridden here
+    width: null,
+    // Same as width
+    height: null,
+    method: 'GET',
+    params: {},
+    // Depends on spin.js (http://fgnass.github.com/spin.js/)
+    showSpinner: false,
+    spinnerClass: '',
+    backgroundClass: 'dialog-background',
+    modal: true,
+    closeButtonClass: 'dialog-close',
+    drag: {
+        enabled: false,
+        handle: ''
+    },
+    // This should be the body class of your dialog window content
+    // and will have a class applied that adds a scrollbar if needed
+    scrollContainer: '',
+    // Can be 'center', an event or jQuery UI Position object
+    position: 'center',
+    // Depends on Ben Alman's resize plugin (http://benalman.com/projects/jquery-resize-plugin/)
+    autoResize: true,
+    onbeforeload: function (dialog) { },
+    // dialog is the html object of the Dialog window
+    onload: function (dialog) { },
+    // If this function returns false the 
+    // dialog will not close
+    onclose: function (dialog) { },
+    // The standard jQuery onerror callback
+    onerror: function (jqXHR, textStatus, errorThrown) { }
 };

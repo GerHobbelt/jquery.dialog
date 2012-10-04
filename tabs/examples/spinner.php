@@ -1,4 +1,4 @@
-<style type="text/css">
+<style scoped>
 .modal-spinner {
     padding:60px;
     background:white;

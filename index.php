@@ -27,7 +27,7 @@
                 <li><a href="jquery.dialog.js" target="_blank">Without Bootstrap (includes css file)</a></li>
             </ul>
         </div>
-        <div style="margin:30px 0">
+        <div class="well header-details">
             version 1.0
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <a href="https://github.com/jamiller619/jquery.dialog">GitHub Project</a>
@@ -67,6 +67,20 @@
 
                 var defaultDialog = new Dialog(dialogOptions);
             });
+            
+            // Javascript to enable link to tab
+            var url = document.location.toString();
+            if (url.match('#'))
+            {
+                $('.nav-tabs a[href=#'+url.split('#')[1]+']').tab('show');
+            } 
+
+            // Change hash for page-reload
+            $('.nav-tabs a').on('shown', function (e)
+            {
+                window.location.hash = e.target.hash;
+                window.scrollTo(0, 0);
+            })
         });
     </script>
 

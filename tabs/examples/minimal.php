@@ -5,7 +5,7 @@
 </div>
 
 <h5>html</h5>
-<pre class="prettyprint language-html">&ltbutton id="open"&gtOpen the Dialog&lt/button&gt</pre>
+<pre class="prettyprint language-html">&lt;button id="open"&gt;Open the Dialog&lt;/button&gt;</pre>
 <h5>javascript</h5>
 <pre class="prettyprint language-javascript">
 $(function() {

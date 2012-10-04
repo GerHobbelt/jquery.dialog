@@ -1,4 +1,4 @@
-<style type="text/css">
+<style scoped>
 .dialog-scroll {
     overflow-x:hidden;
     overflow-y:scroll;

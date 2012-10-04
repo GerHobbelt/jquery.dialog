@@ -1,4 +1,4 @@
-<h2>local content</h2>
+<h2>local content with drag</h2>
 
 <div class="well">
 	<button class="btn btn-primary" id="ex-open-dialog">Open the Dialog</button>

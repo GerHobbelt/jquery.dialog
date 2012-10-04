@@ -2,7 +2,7 @@
 
 	<ul class="nav nav-pills">
 		<li class="active"><a href="#minimal" data-toggle="tab">minimal setup</a></li>
-		<li><a href="#local" data-toggle="tab">local content</a></li>
+		<li><a href="#local" data-toggle="tab">local content with drag</a></li>
 		<li><a href="#spinner" data-toggle="tab">loading spinner</a></li>
 	</ul>
 	

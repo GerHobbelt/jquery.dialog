@@ -29,7 +29,7 @@ $(function() {
     $('#position-open-dialog-ui').click(function () {
 
         var dialogUIOptions = {
-            url: 'ajax.html',
+            url: 'assets/ajax.html',
             position: {
                 my: 'center top',
                 at: 'center top',
@@ -58,7 +58,7 @@ $(function() {
     $('#position-open-dialog-ui').click(function () {
 
         var dialogUIOptions = {
-            url: 'ajax.html',
+            url: 'assets/ajax.html',
             position: {
                 my: 'center top',
                 at: 'center top',

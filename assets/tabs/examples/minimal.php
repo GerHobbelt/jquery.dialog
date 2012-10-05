@@ -13,7 +13,7 @@ $(function() {
     $('#open-dialog').click(function () {
 
         var dialogOptions = {
-            url: 'ajax.html',
+            url: 'assets/ajax.html',
             closeButtonClass: 'close'
         };
 

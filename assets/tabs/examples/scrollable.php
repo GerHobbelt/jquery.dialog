@@ -28,7 +28,7 @@ $(function() {
     $('#scrollable-open-dialog').click(function () {
 
         var dialogOptions = {
-            url: 'scrollable.html',
+            url: 'assets/scrollable.html',
             scrollContainer: '.modal-body'
         };
 
@@ -50,7 +50,7 @@ $(function() {
     $('#scrollable-open-dialog').click(function () {
 
         var dialogOptions = {
-            url: 'scrollable.html',
+            url: 'assets/scrollable.html',
             scrollContainer: '.modal-body'
         };
 

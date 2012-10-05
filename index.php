@@ -3,14 +3,14 @@
 <head>
     <title>jQuery Dialog</title>
 
-    <link rel="stylesheet" type="text/css" href="bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="assets/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="assets/style.css" />
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="prettify.js"></script>
-    <script type="text/javascript" src="bootstrap.js"></script>
-    <script type="text/javascript" src="spin.min.js"></script>
+    <script type="text/javascript" src="assets/prettify.js"></script>
+    <script type="text/javascript" src="assets/bootstrap.js"></script>
+    <script type="text/javascript" src="assets/spin.min.js"></script>
     <script type="text/javascript" src="jquery.dialog.js"></script>
 	<script type="text/javascript">
 	  var _gaq = _gaq || [];
@@ -57,9 +57,9 @@
         </ul>
         
         <div class="tab-content">
-            <div class="tab-pane active" id="options"><?php include('tabs/options.php') ?></div>
-            <div class="tab-pane" id="examples"><?php include('tabs/examples.php') ?></div>
-            <div class="tab-pane" id="events"><?php include('tabs/events.php') ?></div>
+            <div class="tab-pane active" id="options"><?php include('assets/tabs/options.php') ?></div>
+            <div class="tab-pane" id="examples"><?php include('assets/tabs/examples.php') ?></div>
+            <div class="tab-pane" id="events"><?php include('assets/tabs/events.php') ?></div>
         </div>    
     </div>
 
@@ -73,7 +73,7 @@
             $('#open-dialog').click(function () {
 
                 var dialogOptions = {
-                    url: 'ajax.html'
+                    url: 'assets/ajax.html'
                 };
 
                 var defaultDialog = new Dialog(dialogOptions);

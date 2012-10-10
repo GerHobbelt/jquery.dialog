@@ -2,6 +2,8 @@
 <div>
     <pre class="prettyprint language-javascript">
 Dialog.defaults = {
+    // The id to be assigned for the dialog
+    id: null,
     // This can either be the url of the ajax content
     // or, in the case of local content, the id of the element
     url: null,

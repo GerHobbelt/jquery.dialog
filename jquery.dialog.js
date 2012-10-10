@@ -142,6 +142,12 @@ Dialog = function (options)
             loader.remove();
         }
 
+        // Assign ID
+        if(defaults.id != null)
+        {
+            dialog.attr('id', defaults.id);
+        }
+
         // Attach
         $('body').append(dialog.addClass('dialog'));
         
@@ -228,6 +234,8 @@ Dialog = function (options)
 };
 
 Dialog.defaults = {
+    // The id to be assigned for the dialog
+    id: null,
     // This can either be the url of the ajax content
     // or, in the case of local content, the id of the element
     url: null,

@@ -80,7 +80,7 @@
             });
             
             // Javascript to enable link to tab
-            var url = document.location.toString();
+            /*var url = document.location.toString();
             if (url.match('#'))
             {
                 $('.nav-tabs a[href=#'+url.split('#')[1]+']').tab('show');
@@ -91,7 +91,7 @@
             {
                 window.location.hash = e.target.hash;
                 window.scrollTo(0, 0);
-            })
+            });*/
         });
     </script>
 

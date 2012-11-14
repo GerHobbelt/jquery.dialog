@@ -19,7 +19,7 @@
 var Dialog = Dialog || {};
 
 Dialog = function (options)
-{	
+{
     var obj = this,
         dialog,
         loader,
@@ -27,8 +27,9 @@ Dialog = function (options)
         dialogPosition,
         defaults = $.extend({}, Dialog.defaults, options),
         background = $('<div />').addClass(defaults.backgroundClass),
-        siteContainer = $('body');
-	
+        siteContainer = $('body'),
+        isLocal = false;
+
     this.addScroll = function ()
     {
         var h = dialog.height(),
@@ -38,27 +39,37 @@ Dialog = function (options)
         {
             $(defaults.scrollContainer, dialog).addClass('dialog-scroll').height(wh - 200);
         }
-        
+
         positionDialog();
     };
 
     this.close = function ()
-    {	
+    {
         if (!dialog) return;
-        
-        if(defaults.onclose && typeof(defaults.onclose) === 'function')
+
+        if (defaults.onclose && typeof (defaults.onclose) === 'function')
         {
             var response = defaults.onclose(dialog);
-            
-            if(response === false) return;
+
+            if (response === false) return;
         }
-        
+
         $(window).trigger('dialog.close');
 
-        dialog.unbind().remove();
+        dialog.unbind();
+
+        if (isLocal)
+        {
+            dialog.hide();
+        }
+        else
+        {
+            dialog.remove();
+        }
+
         background.remove();
     };
-    
+
     // Position
     if (typeof (defaults.position) === 'object')
     {
@@ -69,7 +80,7 @@ Dialog = function (options)
                 my: 'left top',
                 at: 'center',
                 of: defaults.position,
-                offset: '10' 
+                offset: '10'
             };
         }
         else
@@ -90,37 +101,37 @@ Dialog = function (options)
     this.showSpinner = function ()
     {
         loader = $('<div />').addClass(defaults.spinnerClass);
-        
+
         siteContainer.append(loader);
 
         loader.position(dialogPosition).css('z-index', 10000);
-        
+
         spinner = new Spinner().spin(loader[0]);
     };
-    
-    if(defaults.showSpinner)
+
+    if (defaults.showSpinner)
     {
         this.showSpinner();
     }
-    
+
     if (defaults.modal)
     {
         siteContainer.append(background);
     }
 
     function centerDialog()
-    {	
+    {
         dialogPosition = {
             my: 'center',
             at: 'center',
             of: window
         };
-        
+
         dialog.position(dialogPosition);
     }
-	
+
     function positionDialog()
-    {	
+    {
         // I can't position something that isn't shown
         dialog.show();
 
@@ -143,15 +154,15 @@ Dialog = function (options)
         }
 
         // Assign ID
-        if(defaults.id != null)
+        if (defaults.id != null)
         {
             dialog.attr('id', defaults.id);
         }
 
         // Attach
         $('body').append(dialog.addClass('dialog'));
-        
-        if(defaults.onbeforeload && typeof(defaults.onbeforeload) === 'function')
+
+        if (defaults.onbeforeload && typeof (defaults.onbeforeload) === 'function')
         {
             defaults.onbeforeload(dialog);
             $(window).trigger('dialog.beforeload');
@@ -159,7 +170,7 @@ Dialog = function (options)
 
         positionDialog();
         obj.addScroll();
-        
+
         if (defaults.position === 'center')
         {
             // Reposition on window resize or dialog resize
@@ -176,7 +187,7 @@ Dialog = function (options)
         }
 
         // Tie handlers to close buttons
-        dialog.on('click.dialog', '.' + defaults.closeButtonClass, function()
+        dialog.on('click.dialog', '.' + defaults.closeButtonClass, function ()
         {
             obj.close();
         });
@@ -189,9 +200,9 @@ Dialog = function (options)
             });
         }
 
-        if(isLocal) dialog.addClass('dialog-local');
+        if (isLocal) dialog.addClass('dialog-local');
 
-        if(defaults.onload && typeof(defaults.onload) === 'function')
+        if (defaults.onload && typeof (defaults.onload) === 'function')
         {
             defaults.onload(dialog);
             $(window).trigger('dialog.load');
@@ -199,16 +210,17 @@ Dialog = function (options)
     }
 
     // Let's go!
-    if(!defaults.url || defaults.url.length === 0)
+    if (!defaults.url || defaults.url.length === 0)
     {
         alert('DIALOG ERROR: A dialog must have a url defined!');
         return;
     }
 
     // Is local
-    var firstChar = defaults.url.substr(0,1);
+    var firstChar = defaults.url.substr(0, 1);
     if (firstChar === '#' || firstChar === '.')
     {
+        isLocal = true;
         init($(defaults.url), true);
     }
     // else is remote
